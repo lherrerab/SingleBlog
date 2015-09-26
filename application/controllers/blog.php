@@ -1,15 +1,18 @@
 <?php
     defined('BASEPATH') OR exit('No direct script access allowed');
 	
-	class Blog extends CI_Controller{
+	class Blog extends CI_Controller
+	{
 		
-		function __construct(){
+		function __construct()
+		{
 			parent::__construct();
 			$this->load->model('blog_model');
 			$this->load->library('session');
 		}
 		
-		public function index(){
+		public function index()
+		{
 			$data['title'] = "My Personal Blog";
 			$data['header'] = "My Personal Blog";
 			$data['subtitle'] = "My Official Blog where I write my experiences";
@@ -17,7 +20,8 @@
 			$this->load->view('blog_view',$data); 			
 		}
 		
-		public function addPost(){
+		public function addPost()
+		{
 			if($this->blog_model->isLoggedin()){
 				$data['title'] = "Create a new post";
 				$data['header'] = "My Personal Blog";
@@ -29,14 +33,17 @@
 			}
 		}
 		
-		public function savePost(){
+		public function savePost()
+		{
 			$this->form_validation->set_rules('title','The field title is required','required');
 			$this->form_validation->set_rules('body','The field body is required','required');
 						
-			if($this->form_validation->run() == FALSE){
+			if($this->form_validation->run() == FALSE)
+			{
 				$this->addPost();
 			} 
-			else{
+			else
+			{
 				$data = array(
 							'title' => $this->input->post('title'),
 							'body' => $this->input->post('body'),
@@ -47,7 +54,8 @@
 			}
 		}
 		
-		public function viewPost(){
+		public function viewPost()
+		{
 			$id = $this->input->get('id');
 			$data['title'] = "My Personal Blog";
 			$data['header'] = "My Personal Blog";
@@ -56,14 +64,17 @@
 			$this->load->view('viewPost',$data);
 		}
 		
-		public function saveComment(){
+		public function saveComment()
+		{
 			$id = $this->input->post('postId');
 			$this->form_validation->set_rules('cname','The field title is required','required');
 			
-			if($this->form_validation->run() == FALSE){
+			if($this->form_validation->run() == FALSE)
+			{
 				redirect("/blog/viewPost?id=". $id);
 			} 
-			else{				
+			else
+			{				
 				$data = array(
 								'name' => $this->input->post('cname'),
 								'email' => $this->input->post('cemail'),
@@ -75,20 +86,25 @@
 			}
 		}
 		
-		public function viewDashBoard(){
-			if($this->blog_model->isLoggedin()){
+		public function viewDashBoard()
+		{
+			if($this->blog_model->isLoggedin())
+			{
 				$data['title'] = "My Personal Blog";
 				$data['header'] = "Dashboard";
 				$data['posts'] = $this->blog_model->getPosts();
 				$this->load->view('viewDashboard',$data);
 			}
-			else{
+			else
+			{
 				redirect('login');
 			}			
 		}
 		
-		public function editPost(){
-			if($this->blog_model->isLoggedin()){
+		public function editPost()
+		{
+			if($this->blog_model->isLoggedin())
+			{
 				$id = $this->input->get('id');
 				$data['title'] = "Edit Post";
 				$data['header'] = "My Personal Blog";
@@ -96,20 +112,24 @@
 				$data['post'] = $this->blog_model->getPost($id);	
 				$this->load->view('editPost',$data);
 			}
-			else{
+			else
+			{
 				redirect('login');
 			}
 		}
 		
-		public function updatePost(){
+		public function updatePost()
+		{
 			$id = $this->input->post('postId');
 			$this->form_validation->set_rules('title','The field title is required','required');
 			$this->form_validation->set_rules('body','The field body is required','required');
 			
-			if($this->form_validation->run() == FALSE){
+			if($this->form_validation->run() == FALSE)
+			{
 				redirect("/blog/editPost?id=". $id);
 			} 
-			else{
+			else
+			{
 				$data = array(
 								'title' => $this->input->post('title'),
 								'body' => $this->input->post('body'),
@@ -121,7 +141,8 @@
 			}			
 		}
 		
-		public function deletePost(){			
+		public function deletePost()
+		{			
 			$id = $this->input->get('id');
 			$this->blog_model->deletePost($id);
 			redirect("/blog/viewDashboard");
